@@ -70,6 +70,7 @@ const titleInput = document.getElementById('titleInput');
 const receiveNoInput = document.getElementById('receiveNoInput');
 const receiveDateInput = document.getElementById('receiveDateInput');
 const descInput = document.getElementById('descInput');
+const noteInput = document.getElementById('noteInput');
 const photoInput = document.getElementById('photoInput');
 const photoUploadBox = document.getElementById('photoUploadBox');
 const photoPreview = document.getElementById('photoPreview');
@@ -228,6 +229,7 @@ function resetFormToAddMode() {
   receiveNoInput.value = '';
   receiveDateInput.value = new Date().toISOString().split('T')[0];
   descInput.value = '';
+  noteInput.value = '';
   pendingPhoto = null;
   pendingPhotoFile = null;
   photoInput.value = '';
@@ -245,6 +247,7 @@ function openEditForm(id) {
   receiveNoInput.value = entry.receiveNo || '';
   receiveDateInput.value = entry.receiveDate || new Date().toISOString().split('T')[0];
   descInput.value = entry.desc || '';
+  noteInput.value = entry.note || '';
 
   if (entry.photo) {
     pendingPhoto = entry.photo;
@@ -351,6 +354,7 @@ form.addEventListener('submit', async (e) => {
       receiveNo: receiveNoInput.value.trim(),
       receiveDate: receiveDateInput.value || null,
       desc: descInput.value.trim(),
+      note: noteInput.value.trim(),
       photo: pendingPhoto
     });
   } else {
@@ -359,6 +363,7 @@ form.addEventListener('submit', async (e) => {
       receiveNo: receiveNoInput.value.trim(),
       receiveDate: receiveDateInput.value || null,
       desc: descInput.value.trim(),
+      note: noteInput.value.trim(),
       photo: pendingPhoto,
       steps: defaultSteps(),
       createdAt: Date.now()
@@ -702,10 +707,10 @@ function getTimeframeRange() {
   return null;
 }
 
-// รวมข้อความสำหรับค้นหา: ชื่อเรื่อง, รายละเอียด, และวันที่ (สร้าง/ส่งขึ้น/รับลงมา)
+// รวมข้อความสำหรับค้นหา: ชื่อเรื่อง, รายละเอียด, หมายเหตุ, และวันที่ (สร้าง/ส่งขึ้น/รับลงมา)
 // ในหลายรูปแบบ (ไทยเต็ม, ไทยย่อ, ตัวเลข วัน/เดือน/ปี) เพื่อให้ค้นด้วยวัน เดือน หรือปีได้
 function entrySearchText(entry) {
-  const parts = [entry.title, entry.desc || '', entry.receiveNo || ''];
+  const parts = [entry.title, entry.desc || '', entry.note || '', entry.receiveNo || ''];
 
   parts.push(dateSearchTokens(new Date(entry.createdAt)));
   if (entry.receiveDate) {
@@ -768,6 +773,7 @@ function createFileCard(entry) {
             ${(entry.receiveNo || entry.receiveDate) ? `<p class="file-meta">เลขรับ ${escapeHtml(entry.receiveNo || '-')}${entry.receiveDate ? ' · ' + isoToThaiDate(entry.receiveDate) : ''}</p>` : ''}
             <p class="file-meta">${formatDateTime(entry.createdAt)}</p>
             ${entry.desc ? `<p class="file-meta">${escapeHtml(entry.desc)}</p>` : ''}
+            ${entry.note ? `<p class="file-meta">หมายเหตุ: ${escapeHtml(entry.note)}</p>` : ''}
           </div>
           <div class="file-code">#${docCode(entry)}</div>
         </div>
@@ -926,10 +932,17 @@ function renderDetailModalContent(entry) {
     </div>
   `).join('');
 
-  const noteHtml = entry.desc ? `
+  const descHtml = entry.desc ? `
     <div class="detail-note-block">
       <div class="detail-note-label">รายละเอียดเพิ่มเติม</div>
       <div class="detail-note-text">${escapeHtml(entry.desc)}</div>
+    </div>
+  ` : '';
+
+  const noteHtml = entry.note ? `
+    <div class="detail-note-block">
+      <div class="detail-note-label">หมายเหตุ</div>
+      <div class="detail-note-text">${escapeHtml(entry.note)}</div>
     </div>
   ` : '';
 
@@ -938,6 +951,7 @@ function renderDetailModalContent(entry) {
     <h2 class="detail-modal-title">${escapeHtml(entry.title)}</h2>
     ${photoHtml}
     <div class="detail-info-grid">${infoHtml}</div>
+    ${descHtml}
     ${noteHtml}
     ${createStepsListHtml(entry)}
   `;
