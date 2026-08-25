@@ -171,7 +171,7 @@ async function addEntry(entryData) {
     return true;
   } catch (err) {
     console.error('Add failed:', err);
-    showConnMessage('⚠️ บันทึกแฟ้มไม่สำเร็จ ลองใหม่อีกครั้ง', true);
+    showConnMessage('⚠️ บันทึกแบบไม่สำเร็จ ลองใหม่อีกครั้ง', true);
     return false;
   }
 }
@@ -197,7 +197,7 @@ async function removeEntry(id) {
     await deleteDoc(doc(db, 'entries', id));
   } catch (err) {
     console.error('Delete failed:', err);
-    showConnMessage('⚠️ ลบแฟ้มไม่สำเร็จ ลองใหม่อีกครั้ง', true);
+    showConnMessage('⚠️ ลบแบบไม่สำเร็จ ลองใหม่อีกครั้ง', true);
   }
 }
 
@@ -234,8 +234,8 @@ function resetFormToAddMode() {
   pendingPhotoFile = null;
   photoInput.value = '';
   photoPreview.classList.remove('show');
-  addFileHeader.textContent = 'เพิ่มแฟ้มใหม่';
-  submitBtn.textContent = 'บันทึกแฟ้มใหม่';
+  addFileHeader.textContent = 'เพิ่มแบบใหม่';
+  submitBtn.textContent = 'บันทึกแบบใหม่';
 }
 
 function openEditForm(id) {
@@ -260,7 +260,7 @@ function openEditForm(id) {
     photoPreview.classList.remove('show');
   }
 
-  addFileHeader.textContent = 'แก้ไขแฟ้ม';
+  addFileHeader.textContent = 'แก้ไขแบบ';
   submitBtn.textContent = 'บันทึกการแก้ไข';
 
   switchPage('add-file-page');
@@ -373,7 +373,7 @@ form.addEventListener('submit', async (e) => {
   submitBtn.disabled = false;
 
   if (!ok) {
-    submitBtn.textContent = isEditing ? 'บันทึกการแก้ไข' : 'บันทึกแฟ้มใหม่';
+    submitBtn.textContent = isEditing ? 'บันทึกการแก้ไข' : 'บันทึกแบบใหม่';
     return;
   }
 
@@ -474,11 +474,11 @@ function showDeleteConfirmDialog(id) {
   backdrop.innerHTML = `
     <div class="delete-confirm-dialog">
       <div class="delete-confirm-icon">${TRASH_SVG_LARGE}</div>
-      <h3 class="delete-confirm-title">ลบแฟ้มนี้?</h3>
+      <h3 class="delete-confirm-title">ลบแบบนี้?</h3>
       <p class="delete-confirm-text">การกระทำนี้ไม่สามารถยกเลิกได้</p>
       <div class="delete-confirm-actions">
         <button class="delete-confirm-cancel">ยกเลิก</button>
-        <button class="delete-confirm-ok">ลบแฟ้ม</button>
+        <button class="delete-confirm-ok">ลบแบบ</button>
       </div>
     </div>
   `;
@@ -568,14 +568,14 @@ function render() {
     pagination.innerHTML = '';
     emptyState.classList.remove('hidden');
     if (total === 0) {
-      emptyTitle.textContent = 'ยังไม่มีแฟ้มในระบบ';
-      emptyText.textContent = 'กดปุ่ม "เพิ่มแฟ้มใหม่" เพื่อเริ่มติดตามแฟ้มเอกสารของคุณ';
+      emptyTitle.textContent = 'ยังไม่มีแบบในระบบ';
+      emptyText.textContent = 'กดปุ่ม "เพิ่มแบบใหม่" เพื่อเริ่มติดตามแบบเอกสารของคุณ';
     } else if (searchQuery) {
-      emptyTitle.textContent = 'ไม่พบแฟ้มที่ค้นหา';
+      emptyTitle.textContent = 'ไม่พบแบบที่ค้นหา';
       emptyText.textContent = 'ลองค้นหาด้วยคำอื่น หรือล้างคำค้นหา';
     } else {
-      emptyTitle.textContent = 'ไม่มีแฟ้มในหมวดนี้';
-      emptyText.textContent = 'ลองเลือกแท็บอื่นเพื่อดูแฟ้มทั้งหมด';
+      emptyTitle.textContent = 'ไม่มีแบบในหมวดนี้';
+      emptyText.textContent = 'ลองเลือกแท็บอื่นเพื่อดูแบบทั้งหมด';
     }
     return;
   }
