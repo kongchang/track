@@ -387,9 +387,13 @@ form.addEventListener('submit', async (e) => {
 });
 
 // ============ Step Toggle (7 ขั้นตอนตามลำดับ) ============
-function toggleStep(id, stepKey) {
+function toggleStep(id, stepKey, btn) {
   const entry = state.entries.find(x => x.id === id);
   if (!entry) return;
+
+  // การ์ดในหน้า Dashboard และหน้าต่างรายละเอียด ต่างก็มี id/step ซ้ำกันได้
+  // เลยต้องจำไว้ก่อน render() ว่าปุ่มที่กดอยู่ในกล่องไหน (fileList หรือ modal) เพื่อคุมโฟกัสให้ถูกจุด
+  const container = (btn && btn.closest('#fileList')) ? fileList : detailModalBody;
 
   const steps = getSteps(entry);
   const idx = WORKFLOW_STEPS.findIndex(s => s.key === stepKey);
@@ -426,7 +430,7 @@ function toggleStep(id, stepKey) {
   render();
 
   setTimeout(() => {
-    const datePicker = detailModalBody.querySelector(`[data-entry-id="${id}"][data-step-key="${stepKey}"] .date-input`);
+    const datePicker = container.querySelector(`[data-entry-id="${id}"][data-step-key="${stepKey}"] .date-input`);
     if (datePicker) {
       datePicker.focus();
       if (datePicker.showPicker) {
@@ -436,11 +440,12 @@ function toggleStep(id, stepKey) {
   }, 0);
 }
 
-function saveStepDate(id, stepKey) {
+function saveStepDate(id, stepKey, btn) {
   const entry = state.entries.find(x => x.id === id);
   if (!entry) return;
 
-  const picker = detailModalBody.querySelector(`.date-picker-inline[data-entry-id="${id}"][data-step-key="${stepKey}"]`);
+  const container = (btn && btn.closest('#fileList')) ? fileList : detailModalBody;
+  const picker = container.querySelector(`.date-picker-inline[data-entry-id="${id}"][data-step-key="${stepKey}"]`);
   const input = picker ? picker.querySelector('.date-input') : null;
   if (!input || !input.value) return;
 
@@ -761,7 +766,7 @@ function createFileCard(entry) {
   let progressText;
   if (completed === 0) progressText = 'ยังไม่เริ่มดำเนินการ';
   else if (completed === totalSteps) progressText = 'เสร็จสิ้นทุกขั้นตอน';
-  else progressText = `ขั้นตอนถัดไป: ${escapeHtml(WORKFLOW_STEPS[curIdx].label)}`;
+  else progressText = `ขั้นตอนถัดไป: ${curIdx + 1}. ${escapeHtml(WORKFLOW_STEPS[curIdx].label)}`;
 
   return `
     <div class="file-card" data-id="${entry.id}">
@@ -798,7 +803,7 @@ function createFileCard(entry) {
         </div>
       </div>
 
-      ${createStepChipsHtml(entry)}
+      ${createStepsListHtml(entry)}
     </div>
   `;
 }
@@ -983,7 +988,7 @@ function createStepsListHtml(entry) {
         <button class="status-item" data-action="toggle-step" data-id="${entry.id}" data-step="${s.key}" ${isLocked ? 'disabled' : ''} style="background: none; border: none; padding: 4px; text-align: left; width: 100%;">
           <div class="status-checkbox ${(st.done || isEditingThis) ? 'checked' : ''}">${checkSvg}</div>
           <div>
-            <div class="status-label">${escapeHtml(s.label)}</div>
+            <div class="status-label">ขั้นตอนที่ ${i + 1} : ${escapeHtml(s.label)}</div>
             ${dateDisplay ? `<div class="status-date">${dateDisplay}</div>` : ''}
             ${isEditingThis && !st.done ? `<div class="status-date">เลือกวันที่แล้วกดบันทึก</div>` : ''}
           </div>
@@ -1041,8 +1046,8 @@ detailModalBody.addEventListener('click', (e) => {
   const id = btn.dataset.id;
   const stepKey = btn.dataset.step;
 
-  if (action === 'toggle-step') toggleStep(id, stepKey);
-  else if (action === 'save-step-date') saveStepDate(id, stepKey);
+  if (action === 'toggle-step') toggleStep(id, stepKey, btn);
+  else if (action === 'save-step-date') saveStepDate(id, stepKey, btn);
   else if (action === 'cancel-step-date') cancelStepDate();
 });
 
@@ -1055,20 +1060,32 @@ fileList.addEventListener('click', (e) => {
     return;
   }
 
+  // คลิกที่ช่องเลือกวันที่โดยตรง (ไม่ใช่ปุ่ม) -> ปล่อยให้ input ทำงานตามปกติ ไม่ต้องเปิด modal
+  if (e.target.closest('.date-picker-inline') && !e.target.closest('[data-action]')) {
+    return;
+  }
+
   const btn = e.target.closest('[data-action]');
   if (btn) {
     const action = btn.dataset.action;
     const id = btn.dataset.id;
+    const stepKey = btn.dataset.step;
 
     if (action === 'edit') {
       openEditForm(id);
     } else if (action === 'delete') {
       deleteEntry(id);
+    } else if (action === 'toggle-step') {
+      toggleStep(id, stepKey, btn);
+    } else if (action === 'save-step-date') {
+      saveStepDate(id, stepKey, btn);
+    } else if (action === 'cancel-step-date') {
+      cancelStepDate();
     }
     return;
   }
 
-  // คลิกที่ตัวการ์ดเอง (ไม่ใช่ปุ่ม/รูป) -> เปิดหน้าต่างรายละเอียดเพื่อจัดการขั้นตอนของแฟ้มนั้น
+  // คลิกที่ตัวการ์ดเอง (ไม่ใช่ปุ่ม/รูป/รายการขั้นตอน) -> เปิดหน้าต่างรายละเอียดเพื่อจัดการขั้นตอนของแฟ้มนั้น
   const card = e.target.closest('.file-card');
   if (card && card.dataset.id) {
     openDetailModal(card.dataset.id);
