@@ -67,6 +67,8 @@ const pages = document.querySelectorAll('.page');
 const addFileHeader = document.getElementById('addFileHeader');
 const form = document.getElementById('addFileForm');
 const titleInput = document.getElementById('titleInput');
+const receiveNoInput = document.getElementById('receiveNoInput');
+const receiveDateInput = document.getElementById('receiveDateInput');
 const descInput = document.getElementById('descInput');
 const photoInput = document.getElementById('photoInput');
 const photoUploadBox = document.getElementById('photoUploadBox');
@@ -223,6 +225,8 @@ function switchPage(pageId) {
 function resetFormToAddMode() {
   editingEntryId = null;
   titleInput.value = '';
+  receiveNoInput.value = '';
+  receiveDateInput.value = new Date().toISOString().split('T')[0];
   descInput.value = '';
   pendingPhoto = null;
   pendingPhotoFile = null;
@@ -238,6 +242,8 @@ function openEditForm(id) {
 
   editingEntryId = id;
   titleInput.value = entry.title || '';
+  receiveNoInput.value = entry.receiveNo || '';
+  receiveDateInput.value = entry.receiveDate || new Date().toISOString().split('T')[0];
   descInput.value = entry.desc || '';
 
   if (entry.photo) {
@@ -342,12 +348,16 @@ form.addEventListener('submit', async (e) => {
   if (isEditing) {
     ok = await updateEntry(editingEntryId, {
       title: title,
+      receiveNo: receiveNoInput.value.trim(),
+      receiveDate: receiveDateInput.value || null,
       desc: descInput.value.trim(),
       photo: pendingPhoto
     });
   } else {
     ok = await addEntry({
       title: title,
+      receiveNo: receiveNoInput.value.trim(),
+      receiveDate: receiveDateInput.value || null,
       desc: descInput.value.trim(),
       photo: pendingPhoto,
       steps: defaultSteps(),
@@ -695,9 +705,12 @@ function getTimeframeRange() {
 // รวมข้อความสำหรับค้นหา: ชื่อเรื่อง, รายละเอียด, และวันที่ (สร้าง/ส่งขึ้น/รับลงมา)
 // ในหลายรูปแบบ (ไทยเต็ม, ไทยย่อ, ตัวเลข วัน/เดือน/ปี) เพื่อให้ค้นด้วยวัน เดือน หรือปีได้
 function entrySearchText(entry) {
-  const parts = [entry.title, entry.desc || ''];
+  const parts = [entry.title, entry.desc || '', entry.receiveNo || ''];
 
   parts.push(dateSearchTokens(new Date(entry.createdAt)));
+  if (entry.receiveDate) {
+    parts.push(dateSearchTokens(isoToDateObj(entry.receiveDate)));
+  }
   const steps = getSteps(entry);
   WORKFLOW_STEPS.forEach(s => {
     if (steps[s.key] && steps[s.key].date) {
@@ -752,6 +765,7 @@ function createFileCard(entry) {
         <div class="file-header" style="margin: 0; gap: 0;">
           <div class="file-title-section">
             <p class="file-title">${escapeHtml(entry.title)}</p>
+            ${(entry.receiveNo || entry.receiveDate) ? `<p class="file-meta">เลขรับ ${escapeHtml(entry.receiveNo || '-')}${entry.receiveDate ? ' · ' + isoToThaiDate(entry.receiveDate) : ''}</p>` : ''}
             <p class="file-meta">${formatDateTime(entry.createdAt)}</p>
             ${entry.desc ? `<p class="file-meta">${escapeHtml(entry.desc)}</p>` : ''}
           </div>
@@ -900,6 +914,8 @@ function renderDetailModalContent(entry) {
 
   const infoItems = [
     { label: 'รหัสแฟ้ม', value: `#${docCode(entry)}` },
+    { label: 'เลขรับ', value: entry.receiveNo || '-' },
+    { label: 'วันที่รับ', value: entry.receiveDate ? isoToThaiDate(entry.receiveDate) : '-' },
     { label: 'วันที่สร้าง', value: formatDateTime(entry.createdAt) }
   ];
 
