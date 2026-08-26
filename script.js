@@ -313,9 +313,7 @@ navBtns.forEach(btn => {
 
 // Logout button
 logoutBtn.addEventListener('click', () => {
-  if (confirm('คุณแน่ใจหรือว่าต้องการออกจากระบบ?')) {
-    logout();
-  }
+  logout();
 });
 
 function switchPage(pageId) {
