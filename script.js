@@ -2,6 +2,70 @@
 // ระบบติดตามแฟ้มเอกสาร — app logic (Firebase Firestore backend)
 // ============================================================
 
+// ============ Authentication ============
+const VALID_USERNAME = 'stnkongchang';
+const VALID_PASSWORD = 'kongchangtrack';
+const AUTH_KEY = 'appauth_logged_in';
+
+const loginPage = document.getElementById('loginPage');
+const loginForm = document.getElementById('loginForm');
+const loginUsername = document.getElementById('loginUsername');
+const loginPassword = document.getElementById('loginPassword');
+const passwordToggle = document.getElementById('passwordToggle');
+const loginError = document.getElementById('loginError');
+
+// ตรวจสอบสถานะการเข้าสู่ระบบ
+function checkLoginStatus() {
+  const isLoggedIn = sessionStorage.getItem(AUTH_KEY);
+  if (!isLoggedIn) {
+    loginPage.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  } else {
+    loginPage.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  }
+}
+
+// จัดการการตั้งค่าและการล็อกเอาต์
+function logout() {
+  sessionStorage.removeItem(AUTH_KEY);
+  checkLoginStatus();
+  loginForm.reset();
+  loginError.hidden = true;
+  loginUsername.focus();
+}
+
+// Toggle password visibility
+passwordToggle.addEventListener('click', () => {
+  const isPassword = loginPassword.type === 'password';
+  loginPassword.type = isPassword ? 'text' : 'password';
+});
+
+// Handle login form submit
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  
+  const username = loginUsername.value.trim();
+  const password = loginPassword.value;
+  
+  if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+    sessionStorage.setItem(AUTH_KEY, 'true');
+    loginError.hidden = true;
+    loginForm.reset();
+    checkLoginStatus();
+  } else {
+    loginError.textContent = '❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
+    loginError.hidden = false;
+    loginPassword.value = '';
+    loginPassword.focus();
+  }
+});
+
+// Check login on page load
+window.addEventListener('load', () => {
+  checkLoginStatus();
+});
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import {
   getFirestore, collection, addDoc, updateDoc, deleteDoc, doc,
@@ -61,7 +125,8 @@ function getEntryStatus(entry) {
 }
 
 // ---------- Elements ----------
-const navBtns = document.querySelectorAll('.nav-btn');
+const navBtns = document.querySelectorAll('.nav-btn:not(.logout-btn)');
+const logoutBtn = document.getElementById('logoutBtn');
 const pages = document.querySelectorAll('.page');
 
 const addFileHeader = document.getElementById('addFileHeader');
@@ -217,9 +282,21 @@ navBtns.forEach(btn => {
   });
 });
 
+// Logout button
+logoutBtn.addEventListener('click', () => {
+  if (confirm('คุณแน่ใจหรือว่าต้องการออกจากระบบ?')) {
+    logout();
+  }
+});
+
 function switchPage(pageId) {
+  const target = document.getElementById(pageId);
+  if (!target) {
+    console.warn('switchPage: ไม่พบหน้า', pageId); // กันหน้าจอขาวทั้งหน้าเผื่อมี id ไม่ตรงกัน
+    return;
+  }
   pages.forEach(p => p.classList.remove('active'));
-  document.getElementById(pageId).classList.add('active');
+  target.classList.add('active');
 }
 
 // ============ Add / Edit form mode helpers ============

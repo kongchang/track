@@ -1,4 +1,385 @@
 /* ระบบติดตามแฟ้มเอกสาร — stylesheet */
+
+/* ============ file:// protocol warning ============ */
+.file-protocol-warning{
+  display: none;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--bg);
+}
+.file-protocol-warning.show{
+  display: flex;
+}
+.file-protocol-card{
+  width: 100%;
+  max-width: 460px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 26px;
+  box-shadow: 0 20px 50px rgba(11, 61, 46, 0.12);
+  text-align: center;
+}
+.file-protocol-icon{
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+.file-protocol-title{
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 12px;
+}
+.file-protocol-text{
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  text-align: left;
+  margin: 0 0 12px;
+}
+.file-protocol-text:last-child{
+  margin-bottom: 0;
+}
+.file-protocol-text code{
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  color: var(--navy-soft);
+}
+.file-protocol-steps{
+  background: var(--gold-bg);
+  border: 1px solid #E9D2B0;
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: #8A5A22;
+}
+
+/* ============ Login Page ============ */
+@keyframes loginFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.login-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 1000;
+  min-height: 100vh;
+}
+
+.login-page.hidden {
+  display: none;
+}
+
+.login-container {
+  background: var(--surface);
+  border-radius: 22px;
+  width: 100%;
+  max-width: 900px;
+  min-height: 500px;
+  box-shadow: 0 30px 70px -20px rgba(11, 61, 46, 0.35), 0 10px 24px rgba(11, 61, 46, 0.08);
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  animation: loginFadeIn 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+/* ด้านซ้าย - Brand panel */
+.login-brand-panel {
+  flex: 0 0 44%;
+  position: relative;
+  background: linear-gradient(160deg, var(--navy-soft) 0%, var(--navy) 100%);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.login-brand-pattern {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.login-brand-pattern svg {
+  width: 100%;
+  height: 100%;
+}
+
+.login-brand-content {
+  position: relative;
+  z-index: 2;
+  padding: 44px;
+  color: #fff;
+}
+
+.login-brand-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin-bottom: 30px;
+}
+
+.login-brand-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.login-brand-title {
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1.32;
+  margin: 0 0 13px;
+  color: #fff;
+}
+
+.login-brand-desc {
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.65;
+  max-width: 295px;
+  margin: 0;
+}
+
+/* ด้านขวา - Form */
+.login-form-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 70px;
+  background: var(--surface);
+}
+
+.login-form-inner {
+  width: 100%;
+  max-width: 340px;
+}
+
+.login-eyebrow {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 16px;
+}
+
+.login-badge {
+  display: inline-block;
+  background: var(--gold-bg);
+  color: var(--gold);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 18px;
+}
+
+.login-form-title {
+  font-size: 23px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 6px;
+}
+
+.login-form-subtitle {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  margin: 0 0 34px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.login-form .form-group {
+  margin-bottom: 0;
+}
+
+.login-form .form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login-form .form-input {
+  width: 100%;
+  padding: 13px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 13.5px;
+}
+
+.input-wrapper .form-input {
+  padding-right: 40px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: var(--text-secondary);
+}
+
+.login-button {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 13px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.login-button:hover {
+  background: var(--navy-soft);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(11, 61, 46, 0.28);
+}
+
+.login-button:active {
+  transform: translateY(0);
+}
+
+.login-button:disabled {
+  background: var(--border-strong);
+  color: var(--text-faint);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.login-error {
+  background: #FDECEA;
+  border: 1px solid #F3C6C1;
+  color: var(--red);
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-notice {
+  font-size: 12px;
+  color: var(--text-faint);
+  text-align: center;
+  margin: 28px 0 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 860px) {
+  .login-container {
+    flex-direction: column;
+    max-width: 440px;
+    min-height: 0;
+  }
+
+  .login-brand-panel {
+    flex: 0 0 auto;
+    padding: 36px 40px;
+  }
+
+  .login-brand-content {
+    padding: 0;
+  }
+
+  .login-brand-title {
+    font-size: 22px;
+  }
+
+  .login-brand-desc {
+    max-width: none;
+  }
+
+  .login-form-wrapper {
+    padding: 32px 28px 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-page {
+    padding: 0;
+  }
+
+  .login-container {
+    border-radius: 0;
+    max-width: 100%;
+    min-height: 100vh;
+  }
+
+  .login-brand-panel {
+    padding: 32px 24px;
+  }
+
+  .login-form-wrapper {
+    padding: 28px 20px 32px;
+  }
+}
+
   @keyframes bannerSlide {
     from {
       opacity: 0;
@@ -36,8 +417,8 @@
     --surface-alt: #F8F9FB;
     --border: #E1E4EA;
     --border-strong: #C7CCD6;
-    --navy: #14432C;
-    --navy-soft: #2F6B4C;
+    --navy: #0B3D2E;
+    --navy-soft: #1E6B4E;
     --text-primary: #1A2233;
     --text-secondary: #667085;
     --text-faint: #9AA2B1;
@@ -46,7 +427,7 @@
     --green: #2F8659;
     --green-bg: #EBF5EF;
     --red: #C4453B;
-    --focus: #2F6B4C;
+    --focus: #1E6B4E;
   }
 
   *{ box-sizing: border-box; }
@@ -94,7 +475,7 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 2px 8px rgba(20, 67, 44, 0.1);
+    box-shadow: 0 2px 8px rgba(11, 61, 46, 0.1);
   }
   .topbar-inner{
     max-width: 800px;
@@ -154,6 +535,21 @@
     font-weight: 600;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   }
+  
+  .logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--red) !important;
+    border-color: var(--red) !important;
+    color: #fff;
+  }
+
+  .logout-btn:hover {
+    background: #a83831 !important;
+    border-color: #a83831 !important;
+    color: #fff;
+  }
 
   /* ---------- Stat cards ---------- */
   @keyframes statCardEnter {
@@ -192,7 +588,7 @@
   .stat-card:nth-child(3) { animation-delay: 0.3s; }
   
   .stat-card:hover{
-    box-shadow: 0 4px 12px rgba(20, 67, 44, 0.1);
+    box-shadow: 0 4px 12px rgba(11, 61, 46, 0.1);
     transform: translateY(-2px);
   }
   
@@ -272,10 +668,10 @@
   }
   @keyframes inputFocus {
     from {
-      box-shadow: 0 0 0 0 rgba(47, 107, 76, 0.1);
+      box-shadow: 0 0 0 0 rgba(30, 107, 78, 0.1);
     }
     to {
-      box-shadow: 0 0 0 3px rgba(47, 107, 76, 0.1);
+      box-shadow: 0 0 0 3px rgba(30, 107, 78, 0.1);
     }
   }
   
@@ -326,9 +722,9 @@
   }
   .photo-upload-box:hover{
     border-color: var(--navy-soft);
-    background: #EEF6F1;
+    background: #f5f7fb;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(47, 107, 76, 0.1);
+    box-shadow: 0 4px 12px rgba(30, 107, 78, 0.1);
   }
   .photo-upload-box:active{
     transform: translateY(0);
@@ -429,8 +825,8 @@
     margin-top: 24px;
   }
   @keyframes btnPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(20, 67, 44, 0.4); }
-    50% { box-shadow: 0 0 0 6px rgba(20, 67, 44, 0); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(11, 61, 46, 0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(11, 61, 46, 0); }
   }
   
   .btn-primary{
@@ -467,7 +863,7 @@
   .btn-primary:hover{
     background: var(--navy-soft);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(20, 67, 44, 0.25);
+    box-shadow: 0 6px 20px rgba(11, 61, 46, 0.25);
   }
   .btn-primary:focus-visible{
     outline: 2px solid var(--focus);
@@ -531,7 +927,7 @@
     outline: 2px solid var(--focus);
     outline-offset: 1px;
     border-color: var(--focus);
-    box-shadow: 0 0 0 3px rgba(47, 107, 76, 0.1);
+    box-shadow: 0 0 0 3px rgba(30, 107, 78, 0.1);
   }
   .search-input:focus ~ .search-icon{
     color: var(--navy);
@@ -725,7 +1121,7 @@
     font-weight: 600;
     cursor: default;
     animation: pageButtonActive 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 2px 8px rgba(20, 67, 44, 0.2);
+    box-shadow: 0 2px 8px rgba(11, 61, 46, 0.2);
   }
   .page-btn:disabled{
     opacity: 0.4;
@@ -772,7 +1168,7 @@
   .file-card:nth-child(6) { animation-delay: 0.3s; }
   
   .file-card:hover{
-    box-shadow: 0 8px 24px rgba(20,67,44,0.12);
+    box-shadow: 0 8px 24px rgba(11, 61, 46,0.12);
     border-color: var(--border-strong);
     transform: translateY(-4px);
   }
@@ -1038,13 +1434,13 @@
     margin: -4px;
   }
   .status-item:hover:not(:disabled){
-    background: rgba(47, 107, 76, 0.04);
+    background: rgba(30, 107, 78, 0.04);
     animation: statusItemHover 0.3s ease-out;
   }
   .status-item:focus-visible{
     outline: 2px solid var(--focus);
     outline-offset: 2px;
-    background: rgba(47, 107, 76, 0.06);
+    background: rgba(30, 107, 78, 0.06);
   }
 
   @keyframes checkboxScale {
@@ -1295,10 +1691,10 @@
     border: 1px solid var(--border);
   }
   .edit-btn:hover{
-    background: #E3F1E9;
+    background: #EAF0FB;
     border-color: var(--navy-soft);
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(47, 107, 76, 0.15);
+    box-shadow: 0 2px 8px rgba(30, 107, 78, 0.15);
   }
   .edit-btn:active{
     transform: translateY(0);
@@ -1538,7 +1934,7 @@
   .detail-modal-backdrop{
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(20, 67, 44, 0.45);
+    background: rgba(11, 61, 46, 0.45);
     z-index: 250;
     display: none;
     align-items: center;
@@ -1745,11 +2141,90 @@
     transform: scale(0.95);
   }
 
+  /* ============ Responsive (tablet / mobile) ============ */
+  /* คำนึงว่าปุ่ม/ช่องกรอกทั้งหมดควรกดง่ายบนหน้าจอสัมผัส และไม่มีการ scroll แนวนอนเกิดขึ้น */
+
+  @media (max-width: 720px) {
+    .topbar{ padding: 12px 0; }
+    .topbar-inner{
+      flex-wrap: wrap;
+      row-gap: 10px;
+      gap: 10px;
+    }
+    .topbar-left{ width: 100%; }
+    .brand-text h1{ font-size: 16px; }
+    .topbar-nav{
+      width: 100%;
+      flex-wrap: wrap;
+    }
+    .nav-btn{
+      flex: 1 1 auto;
+      text-align: center;
+      padding: 10px 12px;
+      justify-content: center;
+    }
+
+    .page{ padding: 0 14px; }
+    .panel-header{ padding: 12px 14px; }
+    .panel-body{ padding: 16px; }
+
+    .stats-row{ gap: 10px; }
+    .stat-card{ padding: 14px 12px; }
+
+    /* แท็บกรองอาจแน่นเกินไปบนจอแคบ ให้เลื่อนแนวนอนได้แทนการตัดคำ/ล้น */
+    .filter-tabs{
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+    .filter-tab{
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
+
+    .timeframe-row{ gap: 8px 10px; }
+    .timeframe-custom-range{ margin-left: 0; width: 100%; }
+    .timeframe-date-input{ width: 100%; }
+
+    .file-header{ flex-wrap: wrap; }
+    .file-title, .detail-modal-title{
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .detail-modal{ padding: 22px 18px 16px; max-width: 92vw; }
+    .detail-modal-backdrop{ padding: 14px; }
+    .delete-confirm-dialog{ padding: 26px 18px; }
+  }
+
   @media (max-width: 480px) {
     .stats-row{ grid-template-columns: 1fr; }
-    .topbar-nav{ flex-direction: column; }
+    .topbar-nav{ flex-direction: column; align-items: stretch; }
+    .nav-btn{ width: 100%; }
     .timeframe-custom-range{ margin-left: 0; width: 100%; }
     .timeframe-date-input{ width: 100%; }
     .detail-info-grid{ grid-template-columns: 1fr; }
     .timeframe-detail{ grid-template-columns: repeat(3, 1fr); }
+
+    .page{ padding: 0 12px; }
+    .panel-body{ padding: 14px; }
+    .file-card{ padding: 14px; }
+    .file-photo{ width: 52px; height: 52px; }
+    .stat-num{ font-size: 24px; }
+
+    /* ปุ่มไอคอนเล็กๆ ขยายให้กดง่ายขึ้นบนจอสัมผัส */
+    .edit-btn, .delete-btn{ width: 40px; height: 40px; }
+    .detail-modal-close{ width: 34px; height: 34px; }
+    .search-clear-btn{ padding: 8px 9px; }
+
+    .date-picker-inline{ flex-wrap: wrap; }
+    .date-picker-inline input[type="date"]{ flex: 1 1 100%; }
+    .date-picker-inline button{ flex: 1; }
+
+    /* กันไม่ให้ Safari บน iPhone ซูมหน้าจอเองตอนแตะช่องกรอก (ต้องมี font-size อย่างน้อย 16px) */
+    .form-input, .form-textarea, .search-input,
+    .timeframe-date-input, .date-picker-inline input[type="date"]{
+      font-size: 16px;
+    }
   }
